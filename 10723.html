@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>理數冒險王：國一理化與數學學習歷程成果展示平台</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        morandi: {
+                            bg: '#f8f9fa',
+                            card: '#ffffff',
+                            slate: '#f0f4f8',
+                            border: '#e2e8f0',
+                            text: '#2d3748',
+                            subtext: '#718096',
+                            // Morandi Palette Tokens
+                            blue: '#6482ad',
+                            blueLight: '#edf2f7',
+                            sage: '#88a096',
+                            sageLight: '#eef4f1',
+                            amber: '#d4a373',
+                            amberLight: '#fdf8f3',
+                            mauve: '#b88b9a',
+                            mauveLight: '#faf0f3',
+                            rose: '#c97a7e',
+                            roseLight: '#fdf2f2',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                        display: ['Quicksand', '"Noto Sans TC"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f8f9fa;
+            color: #2d3748;
+        }
+
+        .morandi-glass {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+        }
+
+        .morandi-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+        }
+
+        .morandi-card:hover {
+            transform: translateY(-4px);
+            border-color: #6482ad;
+            box-shadow: 0 12px 25px -5px rgba(100, 130, 173, 0.15);
+        }
+
+        .card-flip {
+            perspective: 1000px;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .card-inner.is-flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        .btn-morandi-primary {
+            background-color: #6482ad;
+            color: #ffffff;
+            transition: all 0.2s ease;
+        }
+        .btn-morandi-primary:hover {
+            background-color: #526e99;
+            box-shadow: 0 6px 15px rgba(100, 130, 173, 0.3);
+            transform: translateY(-1px);
+        }
+        .btn-morandi-primary:active {
+            transform: scale(0.98);
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f8f9fa; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a0aec0; }
+    </style>
+</head>
+<body class="bg-morandi-bg text-morandi-text min-h-screen antialiased">
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="fixed top-0 left-0 w-full z-50 morandi-glass border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-xl bg-morandi-blue text-white flex items-center justify-center font-bold text-lg shadow-md shadow-morandi-blue/20">
+                    <i class="fa-solid fa-flask-vial"></i>
+                </div>
+                <span class="font-display font-bold text-lg text-morandi-text">
+                    理數冒險王 <span class="text-xs font-normal text-morandi-subtext font-sans">| 學習歷程展示</span>
+                </span>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                <a href="#about" class="text-slate-600 hover:text-morandi-blue transition">專案背景</a>
+                <a href="#journey" class="text-slate-600 hover:text-morandi-blue transition">學習歷程</a>
+                <a href="#features" class="text-slate-600 hover:text-morandi-blue transition">核心功能</a>
+                <a href="#game-demo" class="text-slate-600 hover:text-morandi-blue transition">平台實測</a>
+                <a href="#outcomes" class="text-slate-600 hover:text-morandi-blue transition">成效與反思</a>
+            </div>
+
+            <a href="#game-demo" class="px-4 py-2 rounded-xl btn-morandi-primary font-medium text-xs flex items-center gap-1.5 shadow-sm">
+                <i class="fa-solid fa-gamepad"></i>
+                <span>立即體驗平台</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- ================= HERO SECTION ================= -->
+    <section class="pt-28 pb-16 px-4 relative overflow-hidden bg-gradient-to-b from-morandi-blueLight/60 via-morandi-bg to-morandi-bg">
+        <div class="max-w-5xl mx-auto text-center space-y-6 relative z-10">
+            <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white border border-morandi-blue/30 text-morandi-blue text-xs font-semibold shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-morandi-blue animate-pulse"></span>
+                <span>國一理化與數學跨領域 ‧ 遊戲化學習成果發表</span>
+            </div>
+
+            <h1 class="text-3xl md:text-5xl font-extrabold text-slate-800 tracking-tight leading-tight">
+                理數冒險王<br>
+                <span class="text-morandi-blue">
+                    建構自主探索的跨領域理數學習歷程
+                </span>
+            </h1>
+
+            <p class="max-w-2xl mx-auto text-slate-600 text-sm md:text-base leading-relaxed font-normal">
+                本專案拆解國一關鍵知識點，融合「難度分級問答」、「觀念卡牌配對」、「限時衝刺」與「動態互動實驗室」，打造提升抽象理解力與檢討效率的智慧化學習平台。
+            </p>
+
+            <div class="flex flex-wrap items-center justify-center gap-4 pt-2">
+                <a href="#game-demo" class="px-6 py-3 rounded-xl btn-morandi-primary font-semibold text-sm shadow-md">
+                    <i class="fa-solid fa-play mr-2"></i>進入平台體驗
+                </a>
+                <a href="#about" class="px-6 py-3 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-semibold text-sm shadow-sm transition">
+                    <i class="fa-solid fa-book-open mr-2"></i>查看學習歷程
+                </a>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto pt-8">
+                <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+                    <div class="text-2xl font-bold font-display text-morandi-blue">2 大</div>
+                    <div class="text-xs text-slate-500 mt-1">核心學科 (理化/數學)</div>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+                    <div class="text-2xl font-bold font-display text-morandi-mauve">3 階</div>
+                    <div class="text-xs text-slate-500 mt-1">難度分級 (簡單/中等/難)</div>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+                    <div class="text-2xl font-bold font-display text-morandi-amber">4 種</div>
+                    <div class="text-xs text-slate-500 mt-1">互動體驗模式</div>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+                    <div class="text-2xl font-bold font-display text-morandi-sage">100%</div>
+                    <div class="text-xs text-slate-500 mt-1">即時反饋與解析</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= SECTION 1: ABOUT & MOTIVATION ================= -->
+    <section id="about" class="py-16 px-4 max-w-6xl mx-auto space-y-12">
+        <div class="text-center space-y-2">
+            <h2 class="text-2xl md:text-3xl font-bold text-slate-800 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-lightbulb text-morandi-amber"></i> 專案背景與開發動機
+            </h2>
+            <p class="text-xs md:text-sm text-slate-500">直擊學習痛點，將抽象觀念轉化為可觸摸、可實驗的具體體驗</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-morandi-roseLight p-6 rounded-2xl border border-morandi-rose/30 space-y-3">
+                <div class="w-10 h-10 rounded-xl bg-morandi-rose text-white flex items-center justify-center text-lg font-bold">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <h3 class="text-base font-bold text-slate-800">學習痛點發現</h3>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    國一理化「密度 $D=M/V$」與數學「正負數、等量公理」過於抽象，紙本題目缺乏直觀練習與即時引導，學生容易產生學習挫折感。
+                </p>
+            </div>
+
+            <div class="bg-morandi-sageLight p-6 rounded-2xl border border-morandi-sage/30 space-y-3">
+                <div class="w-10 h-10 rounded-xl bg-morandi-sage text-white flex items-center justify-center text-lg font-bold">
+                    <i class="fa-solid fa-bullseye"></i>
+                </div>
+                <h3 class="text-base font-bold text-slate-800">遊戲化解方</h3>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    導入難度漸進式的關卡設計、觀念翻牌與限時衝刺機制，將原本枯燥的重複練習轉化為富有成就感的闖關冒險。
+                </p>
+            </div>
+
+            <div class="bg-morandi-blueLight p-6 rounded-2xl border border-morandi-blue/30 space-y-3">
+                <div class="w-10 h-10 rounded-xl bg-morandi-blue text-white flex items-center justify-center text-lg font-bold">
+                    <i class="fa-solid fa-layer-group"></i>
+                </div>
+                <h3 class="text-base font-bold text-slate-800">知識架構涵蓋</h3>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    完整涵蓋「正負數絕對值」、「一元一次方程式」、「密度與濃度」及「波形與折射」等國一跨學科重點核心觀念。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= SECTION 2: LEARNING JOURNEY & MILESTONES ================= -->
+    <section id="journey" class="py-16 px-4 bg-white border-y border-slate-200">
+        <div class="max-w-6xl mx-auto space-y-12">
+            <div class="text-center space-y-2">
+                <h2 class="text-2xl md:text-3xl font-bold text-slate-800 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-route text-morandi-blue"></i> 專案學習歷程與開發里程碑
+                </h2>
+                <p class="text-xs md:text-sm text-slate-500">以需求分析為起點，經過循序迭代完成系統建構</p>
+            </div>
+
+            <!-- Timeline -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
+                <div class="morandi-card p-5 rounded-2xl relative space-y-2">
+                    <div class="text-xs font-bold text-morandi-blue font-display">MILESTONE 01</div>
+                    <h4 class="font-bold text-slate-800 text-sm">需求分析與題目設計</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed">梳理國一數學與理化課綱痛點，精選並標註難度等級（簡單/中等/難）。</p>
+                </div>
+
+                <div class="morandi-card p-5 rounded-2xl relative space-y-2">
+                    <div class="text-xs font-bold text-morandi-sage font-display">MILESTONE 02</div>
+                    <h4 class="font-bold text-slate-800 text-sm">遊戲機制與架構規劃</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed">設計難度分級、記憶翻牌、60秒衝刺與錯題自動收集機制。</p>
+                </div>
+
+                <div class="morandi-card p-5 rounded-2xl relative space-y-2">
+                    <div class="text-xs font-bold text-morandi-amber font-display">MILESTONE 03</div>
+                    <h4 class="font-bold text-slate-800 text-sm">互動實驗室動態開發</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed">打造「天平平衡」與「密度沉浮」模擬器，實現參數實時運算與視覺呈現。</p>
+                </div>
+
+                <div class="morandi-card p-5 rounded-2xl relative space-y-2">
+                    <div class="text-xs font-bold text-morandi-mauve font-display">MILESTONE 04</div>
+                    <h4 class="font-bold text-slate-800 text-sm">使用者測試與介面優化</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed">邀請同儕實測反饋，全面調整為柔和優雅的莫蘭迪色系與流暢動畫。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= SECTION 3: PLATFORM FEATURE HIGHLIGHTS ================= -->
+    <section id="features" class="py-16 px-4 max-w-6xl mx-auto space-y-12">
+        <div class="text-center space-y-2">
+            <h2 class="text-2xl md:text-3xl font-bold text-slate-800 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-shapes text-morandi-mauve"></i> 平台核心功能特色
+            </h2>
+            <p class="text-xs md:text-sm text-slate-500">多元化的複習模式，兼顧觀念建構與練題需求</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="morandi-card p-5 rounded-2xl space-y-3 text-center">
+                <div class="w-12 h-12 rounded-xl bg-morandi-blueLight text-morandi-blue flex items-center justify-center text-xl font-bold mx-auto">
+                    <i class="fa-solid fa-list-check"></i>
+                </div>
+                <h3 class="font-bold text-slate-800 text-sm">難度分級問答</h3>
+                <p class="text-xs text-slate-500 leading-relaxed">提供簡單、中等、高階素養題，滿足不同學習階段需求。</p>
+            </div>
+
+            <div class="morandi-card p-5 rounded-2xl space-y-3 text-center">
+                <div class="w-12 h-12 rounded-xl bg-morandi-mauveLight text-morandi-mauve flex items-center justify-center text-xl font-bold mx-auto">
+                    <i class="fa-solid fa-clone"></i>
+                </div>
+                <h3 class="font-bold text-slate-800 text-sm">記憶卡牌配對</h3>
+                <p class="text-xs text-slate-500 leading-relaxed">配對名詞與對應公式，建立圖像化觀念連結與記憶。</p>
+            </div>
+
+            <div class="morandi-card p-5 rounded-2xl space-y-3 text-center">
+                <div class="w-12 h-12 rounded-xl bg-morandi-amberLight text-morandi-amber flex items-center justify-center text-xl font-bold mx-auto">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <h3 class="font-bold text-slate-800 text-sm">60秒極速衝刺</h3>
+                <p class="text-xs text-slate-500 leading-relaxed">鍛鍊計算熟練度與反應速度，模擬考試時間壓力。</p>
+            </div>
+
+            <div class="morandi-card p-5 rounded-2xl space-y-3 text-center">
+                <div class="w-12 h-12 rounded-xl bg-morandi-sageLight text-morandi-sage flex items-center justify-center text-xl font-bold mx-auto">
+                    <i class="fa-solid fa-microscope"></i>
+                </div>
+                <h3 class="font-bold text-slate-800 text-sm">動態互動實驗室</h3>
+                <p class="text-xs text-slate-500 leading-relaxed">拖動數值即時檢視天平平衡與密度沉浮，觀念一目瞭然。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= SECTION 4: EMBEDDED INTERACTIVE GAME PLATFORM ================= -->
+    <section id="game-demo" class="py-16 px-4 bg-slate-100 border-t border-slate-200">
+        <div class="max-w-6xl mx-auto space-y-6">
+            <div class="text-center space-y-2">
+                <div class="inline-flex items-center space-x-2 px-3 py-1 bg-white border border-morandi-sage/40 text-morandi-sage text-xs rounded-full font-semibold shadow-sm">
+                    <i class="fa-solid fa-laptop-code"></i>
+                    <span>平台體驗實測區</span>
+                </div>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-slate-800">
+                    理數冒險王：線上互動體驗平台
+                </h2>
+                <p class="text-xs md:text-sm text-slate-500">歡迎在下方直接進行題目測試、記憶卡牌與模擬器操作！</p>
+            </div>
+
+            <!-- EMBEDDED INTERACTIVE CONTAINER (MORANDI THEME) -->
+            <div class="bg-white rounded-3xl p-4 sm:p-6 lg:p-8 border border-slate-200 shadow-xl relative">
+
+                <!-- Header Bar -->
+                <div class="flex items-center justify-between pb-4 border-b border-slate-200 mb-6">
+                    <div class="flex items-center space-x-3 cursor-pointer" onclick="audioManager.play('click'); showScreen('mode-select-screen');">
+                        <div class="w-10 h-10 rounded-xl bg-morandi-blue text-white flex items-center justify-center font-bold text-xl shadow-md">
+                            <i class="fa-solid fa-flask-vial"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-display font-bold text-base text-slate-800">
+                                理數冒險王 <span class="text-[10px] px-2 py-0.5 rounded bg-morandi-blueLight text-morandi-blue font-sans font-semibold">實體體驗</span>
+                            </h3>
+                            <p class="text-[10px] text-slate-500">國一理化 × 數學互動學習系統</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-2 sm:space-x-3">
+                        <button onclick="toggleAudio()" id="audio-btn" class="p-2 bg-slate-100 hover:bg-slate-200 text-morandi-blue rounded-lg text-xs border border-slate-200 transition" title="音效開關">
+                            <i class="fa-solid fa-volume-high"></i>
+                        </button>
+
+                        <div class="flex items-center space-x-1.5 bg-morandi-amberLight px-3 py-1.5 rounded-full border border-morandi-amber/30">
+                            <i class="fa-solid fa-trophy text-morandi-amber text-xs"></i>
+                            <span class="text-[11px] text-slate-600">總分:</span>
+                            <span id="user-score" class="font-bold text-morandi-amber font-display text-xs">0</span>
+                        </div>
+
+                        <button onclick="audioManager.play('click'); openMistakeNotebook();" class="relative p-2 bg-morandi-roseLight hover:bg-morandi-rose/20 text-morandi-rose rounded-lg text-xs border border-morandi-rose/30 transition" title="錯題本">
+                            <i class="fa-solid fa-book-bookmark"></i>
+                            <span id="mistake-badge" class="hidden absolute -top-1 -right-1 w-4 h-4 bg-morandi-rose text-white text-[9px] font-bold rounded-full flex items-center justify-center">0</span>
+                        </button>
+
+                        <button onclick="audioManager.play('click'); showScreen('concept-lab-screen');" class="flex items-center space-x-1.5 bg-morandi-sage hover:bg-morandi-sage/90 text-white text-xs px-3 py-1.5 rounded-lg font-medium shadow-sm transition">
+                            <i class="fa-solid fa-microscope"></i>
+                            <span class="hidden sm:inline">互動實驗室</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- MAIN SCREENS -->
+                <main class="w-full">
+                    
+                    <!-- MODE SELECT SCREEN -->
+                    <section id="mode-select-screen" class="space-y-6 py-2">
+                        <div class="bg-morandi-slate rounded-2xl p-4 max-w-xl mx-auto space-y-2 text-center border border-slate-200">
+                            <div class="flex items-center justify-center space-x-2 text-xs font-semibold text-slate-700">
+                                <i class="fa-solid fa-sliders text-morandi-blue"></i>
+                                <span>選擇題目難度 (Difficulty Level)</span>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3 pt-1">
+                                <button onclick="setDifficulty('easy')" id="diff-btn-easy" class="py-2 px-3 rounded-xl font-semibold text-xs border border-morandi-sage bg-morandi-sageLight text-morandi-sage shadow-sm transition">
+                                    🟢 簡單<br><span class="text-[10px] text-slate-500 font-normal">觀念基礎題</span>
+                                </button>
+                                <button onclick="setDifficulty('medium')" id="diff-btn-medium" class="py-2 px-3 rounded-xl font-semibold text-xs border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 transition">
+                                    🟡 中等<br><span class="text-[10px] text-slate-500 font-normal">進階計算題</span>
+                                </button>
+                                <button onclick="setDifficulty('hard')" id="diff-btn-hard" class="py-2 px-3 rounded-xl font-semibold text-xs border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 transition">
+                                    🔴 難<br><span class="text-[10px] text-slate-500 font-normal">高階素養題</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 pt-2">
+                            <!-- Quiz Card -->
+                            <div onclick="audioManager.play('click'); startQuizMode();" class="morandi-card rounded-2xl p-6 cursor-pointer flex flex-col justify-between group">
+                                <div class="space-y-4">
+                                    <div class="w-12 h-12 rounded-xl bg-morandi-blueLight text-morandi-blue flex items-center justify-center text-xl group-hover:scale-110 transition">
+                                        <i class="fa-solid fa-list-check"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center space-x-2">
+                                            <h3 class="text-base font-bold text-slate-800 group-hover:text-morandi-blue transition">闖關問答</h3>
+                                            <span id="quiz-diff-tag" class="bg-morandi-sageLight text-morandi-sage text-[10px] px-2 py-0.5 rounded border border-morandi-sage/30 font-semibold">簡單</span>
+                                        </div>
+                                        <p class="text-slate-500 text-xs mt-2 leading-relaxed">
+                                            選擇選擇題、觀念是非題或填空題進行挑戰，附詳細觀念解析。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="mt-6 flex items-center text-morandi-blue text-xs font-semibold group-hover:translate-x-1 transition">
+                                    <span>開始挑戰</span>
+                                    <i class="fa-solid fa-arrow-right ml-2"></i>
+                                </div>
+                            </div>
+
+                            <!-- Memory Card -->
+                            <div onclick="audioManager.play('click'); startMemoryGame();" class="morandi-card rounded-2xl p-6 cursor-pointer flex flex-col justify-between group">
+                                <div class="space-y-4">
+                                    <div class="w-12 h-12 rounded-xl bg-morandi-mauveLight text-morandi-mauve flex items-center justify-center text-xl group-hover:scale-110 transition">
+                                        <i class="fa-solid fa-clone"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center space-x-2">
+                                            <h3 class="text-base font-bold text-slate-800 group-hover:text-morandi-mauve transition">記憶卡牌遊戲</h3>
+                                            <span class="bg-morandi-mauveLight text-morandi-mauve text-[10px] px-2 py-0.5 rounded border border-morandi-mauve/30 font-semibold">觀念連連看</span>
+                                        </div>
+                                        <p class="text-slate-500 text-xs mt-2 leading-relaxed">
+                                            翻牌配對，強化密度公式、絕對值與聲音折射觀念。
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="mt-6 flex items-center text-morandi-mauve text-xs font-semibold group-hover:translate-x-1 transition">
+                                    <span>開啟翻牌大考驗</span>
+                                    <i class="fa-solid fa-arrow-right ml-2"></i>
+                                </div>
+                            </div>
+
+                            <!-- Time Attack Card -->
+                            <div onclick="audioManager.play('click'); startTimeAttackMode();" class="morandi-card rounded-2xl p-6 cursor-pointer flex flex-col justify-between group">
+                                <div class="space-y-4">
+                                    <div class="w-12 h-12 rounded-xl bg-morandi-amberLight text-morandi-amber flex items-center justify-center text-xl group-hover:scale-110 transition">
+                                        <i class="fa-solid fa-bolt"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center space-x-2">
+                                            <h3 class="text-base font-bold text-slate-800 group-hover:text-morandi-amber transition">60 秒限時衝刺</h3>
+                                            <span class="bg-morandi-amberLight text-morandi-amber text-[10px] px-2 py-0.5 rounded border border-morandi-amber/30 font-semibold">快問快答</span>
+                                        </div>
+                                        <p class="text-slate-500 text-xs mt-2 leading-relaxed">
+                                            60 秒倒數衝刺！挑戰答對題數，訓練理數計算熟練度！
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="mt-6 flex items-center text-morandi-amber text-xs font-semibold group-hover:translate-x-1 transition">
+                                    <span>進入極速衝刺</span>
+                                    <i class="fa-solid fa-arrow-right ml-2"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Lab Banner -->
+                        <div class="bg-gradient-to-r from-morandi-sageLight to-morandi-blueLight rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4 border border-slate-200">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-11 h-11 rounded-xl bg-white text-morandi-sage flex items-center justify-center text-xl shadow-sm flex-shrink-0">
+                                    <i class="fa-solid fa-flask"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-bold text-slate-800">想徹底搞懂密度與天平？</h3>
+                                    <p class="text-slate-600 text-xs">點擊開啟「互動實驗室」動態試驗密度沉浮與等量公理天平！</p>
+                                </div>
+                            </div>
+                            <button onclick="audioManager.play('click'); showScreen('concept-lab-screen');" class="w-full md:w-auto px-4 py-2 bg-morandi-sage hover:bg-morandi-sage/90 text-white text-xs font-semibold rounded-xl shadow-sm transition whitespace-nowrap">
+                                開啟實驗室 <i class="fa-solid fa-microscope ml-1"></i>
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- CONCEPT LAB SCREEN -->
+                    <section id="concept-lab-screen" class="hidden space-y-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                                    <i class="fa-solid fa-flask-vial text-morandi-sage"></i> 國一理數動態實驗室
+                                </h3>
+                                <p class="text-xs text-slate-500">拖動數值，即時觀察物理與數學變化的規律</p>
+                            </div>
+                            <button onclick="audioManager.play('click'); showScreen('mode-select-screen');" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-xs font-medium transition">
+                                <i class="fa-solid fa-house mr-1"></i>回主選單
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <!-- Sim 1 -->
+                            <div class="morandi-card rounded-2xl p-5 space-y-4">
+                                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                                    <h4 class="font-bold text-slate-800 text-sm">🧪 密度 ($D = M / V$) 沉浮模擬器</h4>
+                                    <span class="text-[10px] bg-morandi-blueLight text-morandi-blue px-2 py-0.5 rounded font-semibold">理化重點</span>
+                                </div>
+
+                                <div class="space-y-4 text-xs">
+                                    <div class="bg-morandi-slate p-3.5 rounded-xl space-y-3">
+                                        <div>
+                                            <div class="flex justify-between font-medium text-slate-700">
+                                                <span>物體質量 (M): <b id="sim-m-val" class="text-morandi-blue">100</b> g</span>
+                                            </div>
+                                            <input type="range" min="10" max="300" value="100" id="sim-m" oninput="updateDensitySim()" class="w-full accent-morandi-blue mt-1">
+                                        </div>
+
+                                        <div>
+                                            <div class="flex justify-between font-medium text-slate-700">
+                                                <span>物體體積 (V): <b id="sim-m-val" class="text-morandi-blue"><span id="sim-v-val">200</span></b> cm³</span>
+                                            </div>
+                                            <input type="range" min="20" max="400" value="200" id="sim-v" oninput="updateDensitySim()" class="w-full accent-morandi-blue mt-1">
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col items-center justify-center space-y-3">
+                                        <div class="relative w-36 h-36 border-b-4 border-x-4 border-morandi-blue/60 rounded-b-xl bg-blue-50/50 overflow-hidden flex items-end justify-center">
+                                            <div class="absolute inset-x-0 bottom-0 h-24 bg-morandi-blue/20 border-t border-morandi-blue/40"></div>
+                                            <div id="sim-object" class="z-10 w-12 h-12 rounded-lg bg-morandi-amber text-white font-bold text-[10px] flex items-center justify-center shadow-md transition-all duration-300">
+                                                物體
+                                            </div>
+                                        </div>
+
+                                        <div class="text-center space-y-1">
+                                            <div class="text-slate-500 text-[11px]">計算密度結果：</div>
+                                            <div id="sim-density-res" class="text-xl font-bold font-display text-morandi-blue">0.50 g/cm³</div>
+                                            <div id="sim-float-status" class="text-xs font-semibold text-morandi-sage">浮於水面 (密度 < 1.0 g/cm³)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Sim 2 -->
+                            <div class="morandi-card rounded-2xl p-5 space-y-4">
+                                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                                    <h4 class="font-bold text-slate-800 text-sm">⚖️ 一元一次方程式天平模擬器</h4>
+                                    <span class="text-[10px] bg-morandi-sageLight text-morandi-sage px-2 py-0.5 rounded font-semibold">等量公理</span>
+                                </div>
+
+                                <div class="space-y-4 text-xs">
+                                    <div class="bg-morandi-slate p-3.5 rounded-xl space-y-3">
+                                        <p class="text-slate-700 font-medium">求解方程式：<b class="text-morandi-blue font-display">x + A = B</b></p>
+                                        
+                                        <div>
+                                            <div class="flex justify-between font-medium text-slate-700">
+                                                <span>常數 A: <b id="sim-eq-a-val" class="text-morandi-sage">5</b></span>
+                                            </div>
+                                            <input type="range" min="1" max="15" value="5" id="sim-eq-a" oninput="updateEqSim()" class="w-full accent-morandi-sage mt-1">
+                                        </div>
+
+                                        <div>
+                                            <div class="flex justify-between font-medium text-slate-700">
+                                                <span>總和 B: <b id="sim-eq-b-val" class="text-morandi-sage">12</b></span>
+                                            </div>
+                                            <input type="range" min="5" max="30" value="12" id="sim-eq-b" oninput="updateEqSim()" class="w-full accent-morandi-sage mt-1">
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center space-y-3">
+                                        <div class="flex items-center justify-around py-3 bg-white rounded-xl border border-slate-200">
+                                            <div class="text-center">
+                                                <div class="text-[10px] text-slate-400">左盤 (x + A)</div>
+                                                <div class="text-sm font-bold text-morandi-amber">x + <span id="eq-left-a">5</span></div>
+                                            </div>
+                                            <div class="text-xl text-morandi-sage font-bold">⚖️ =</div>
+                                            <div class="text-center">
+                                                <div class="text-[10px] text-slate-400">右盤 (B)</div>
+                                                <div class="text-sm font-bold text-morandi-blue" id="eq-right-b">12</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="space-y-1">
+                                            <div class="text-slate-500 text-[11px]">利用等量減法公理 (兩邊同減 A)：</div>
+                                            <div id="sim-eq-res" class="text-lg font-bold font-display text-morandi-sage">x = 12 - 5 = 7</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- QUIZ SCREEN -->
+                    <section id="quiz-screen" class="hidden space-y-6">
+                        <div class="flex items-center justify-between bg-morandi-slate p-3.5 rounded-xl border border-slate-200">
+                            <div class="flex items-center space-x-3">
+                                <span id="quiz-category-tag" class="px-2.5 py-1 bg-white text-morandi-blue text-xs font-semibold rounded-md border border-slate-200">國一理數</span>
+                                <span id="quiz-diff-badge" class="px-2 py-0.5 text-[10px] bg-morandi-sageLight text-morandi-sage rounded font-semibold">簡單</span>
+                                <span class="text-xs font-semibold text-slate-600">第 <span id="current-question-num" class="text-morandi-blue font-bold">1</span> / <span id="total-questions-num">5</span> 題</span>
+                            </div>
+                            <div class="w-1/3 bg-slate-200 h-2 rounded-full overflow-hidden">
+                                <div id="quiz-progress-bar" class="bg-morandi-blue h-full w-0 transition-all duration-300"></div>
+                            </div>
+                        </div>
+
+                        <div class="morandi-card rounded-2xl p-6 space-y-6">
+                            <div class="space-y-3">
+                                <h3 id="quiz-question-text" class="text-base md:text-lg font-bold text-slate-800 leading-relaxed">題目載入中...</h3>
+                                <div id="quiz-hint-box" class="hidden bg-morandi-amberLight p-3 rounded-xl border border-morandi-amber/30 text-morandi-amber text-xs flex items-center space-x-2">
+                                    <i class="fa-solid fa-lightbulb"></i>
+                                    <span id="quiz-hint-text">提示</span>
+                                </div>
+                            </div>
+
+                            <div id="quiz-options-container" class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2"></div>
+
+                            <div id="quiz-explanation-box" class="hidden bg-morandi-slate rounded-xl p-4 border border-slate-200 space-y-3">
+                                <div class="flex items-center space-x-2 text-morandi-blue font-bold text-xs">
+                                    <i class="fa-solid fa-key"></i>
+                                    <span>觀念解析與步驟拆解</span>
+                                </div>
+                                <p id="quiz-explanation-text" class="text-slate-600 text-xs leading-relaxed whitespace-pre-line">解析載入中...</p>
+                                <div class="pt-2 flex justify-end">
+                                    <button id="next-question-btn" onclick="audioManager.play('click'); nextQuizQuestion();" class="px-4 py-2 bg-morandi-blue hover:bg-morandi-blue/90 text-white font-semibold rounded-lg text-xs transition shadow-sm">
+                                        下一題 <i class="fa-solid fa-arrow-right ml-1"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- MEMORY SCREEN -->
+                    <section id="memory-screen" class="hidden space-y-6">
+                        <div class="flex flex-wrap items-center justify-between gap-4 bg-morandi-slate p-3.5 rounded-xl border border-slate-200">
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-sm">國一理數公式與觀念翻牌</h3>
+                                <p class="text-xs text-slate-500">點擊翻開卡牌，將對應的「觀念」與「定義/公式」翻出配對</p>
+                            </div>
+                            <div class="flex items-center space-x-6 text-xs">
+                                <div class="text-slate-600">步數: <span id="memory-moves" class="font-bold text-morandi-mauve font-display text-sm">0</span></div>
+                                <div class="text-slate-600">配對: <span id="memory-matches" class="font-bold text-morandi-sage font-display text-sm">0 / 6</span></div>
+                            </div>
+                        </div>
+
+                        <div id="memory-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 min-h-[320px]"></div>
+                    </section>
+
+                    <!-- TIME ATTACK SCREEN -->
+                    <section id="timeattack-screen" class="hidden space-y-6">
+                        <div class="bg-morandi-amberLight p-4 rounded-2xl border border-morandi-amber/30 flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-xl bg-morandi-amber text-white flex items-center justify-center font-bold text-lg">
+                                    <i class="fa-solid fa-stopwatch"></i>
+                                </div>
+                                <div>
+                                    <div class="text-[10px] text-slate-500">60 秒衝刺大挑戰</div>
+                                    <div class="text-sm font-bold text-slate-800">答對題數: <span id="ta-score" class="font-display text-morandi-amber">0</span></div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center space-x-2">
+                                <i class="fa-solid fa-clock text-morandi-amber text-xl animate-pulse"></i>
+                                <span id="ta-timer" class="text-2xl font-black font-display text-morandi-amber">60</span>
+                                <span class="text-xs text-slate-500">s</span>
+                            </div>
+                        </div>
+
+                        <div class="morandi-card rounded-2xl p-6 space-y-6">
+                            <h3 id="ta-question-text" class="text-base font-bold text-slate-800 text-center py-2">載入中...</h3>
+                            <div id="ta-options-container" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                        </div>
+                    </section>
+
+                </main>
+
+                <!-- MISTAKE MODAL -->
+                <div id="mistake-modal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div class="bg-white max-w-2xl w-full rounded-2xl p-6 space-y-4 border border-slate-200 shadow-2xl max-h-[85vh] flex flex-col">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <h3 class="text-base font-bold text-morandi-rose flex items-center gap-2">
+                                <i class="fa-solid fa-book-bookmark"></i> 錯題檢視本 (Mistake Notebook)
+                            </h3>
+                            <button onclick="closeMistakeNotebook()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+                        </div>
+                        <div id="mistake-list" class="flex-grow overflow-y-auto space-y-3 pr-2"></div>
+                    </div>
+                </div>
+
+                <!-- RESULT MODAL -->
+                <div id="result-modal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div class="bg-white max-w-md w-full rounded-2xl p-6 space-y-5 text-center border border-slate-200 shadow-2xl relative">
+                        <div class="w-14 h-14 bg-morandi-amberLight border border-morandi-amber/30 rounded-2xl flex items-center justify-center mx-auto text-2xl text-morandi-amber shadow-sm">
+                            <i class="fa-solid fa-award"></i>
+                        </div>
+                        <div class="space-y-1">
+                            <h3 id="result-title" class="text-lg font-bold text-slate-800">關卡完成！</h3>
+                            <p id="result-subtitle" class="text-slate-500 text-xs">你的理數解題實力有顯著提升！</p>
+                        </div>
+                        <div class="bg-morandi-slate rounded-xl p-4 grid grid-cols-2 gap-4 border border-slate-200">
+                            <div>
+                                <div class="text-[10px] text-slate-500">獲得積分</div>
+                                <div id="result-score" class="text-xl font-bold text-morandi-amber font-display">+0</div>
+                            </div>
+                            <div>
+                                <div class="text-[10px] text-slate-500">表現評級</div>
+                                <div id="result-rank" class="text-xl font-bold text-morandi-blue font-display">S</div>
+                            </div>
+                        </div>
+                        <div class="flex space-x-3 pt-2">
+                            <button onclick="closeResultModal(); showScreen('mode-select-screen');" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition">
+                                回主選單
+                            </button>
+                            <button id="result-restart-btn" onclick="restartCurrentMode()" class="flex-1 py-2.5 bg-morandi-blue hover:bg-morandi-blue/90 text-white text-xs font-semibold rounded-xl transition shadow-sm">
+                                再試一次
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= SECTION 5: IMPACT & REFLECTION ================= -->
+    <section id="outcomes" class="py-16 px-4 max-w-6xl mx-auto space-y-12">
+        <div class="text-center space-y-2">
+            <h2 class="text-2xl md:text-3xl font-bold text-slate-800 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-chart-line text-morandi-sage"></i> 學習成效與專案反思
+            </h2>
+            <p class="text-xs md:text-sm text-slate-500">整合互動媒體技術，賦能理數自主學習</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="morandi-card p-6 rounded-2xl space-y-3">
+                <div class="w-10 h-10 rounded-xl bg-morandi-sageLight text-morandi-sage flex items-center justify-center text-lg font-bold">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <h3 class="font-bold text-slate-800 text-base">觀念具體化</h3>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    將原本單純背誦公式的《密度》與《一元一次方程式》，藉由可調式模擬器視覺化，顯著降低觀念理解門檻。
+                </p>
+            </div>
+
+            <div class="morandi-card p-6 rounded-2xl space-y-3">
+                <div class="w-10 h-10 rounded-xl bg-morandi-roseLight text-morandi-rose flex items-center justify-center text-lg font-bold">
+                    <i class="fa-solid fa-rotate-left"></i>
+                </div>
+                <h3 class="font-bold text-slate-800 text-base">精準弱點檢討</h3>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    系統自動收集作答錯誤題目至錯題本，搭配詳細步驟拆解，實現高效率的自主診斷與補強。
+                </p>
+            </div>
+
+            <div class="morandi-card p-6 rounded-2xl space-y-3">
+                <div class="w-10 h-10 rounded-xl bg-morandi-blueLight text-morandi-blue flex items-center justify-center text-lg font-bold">
+                    <i class="fa-solid fa-arrows-spin"></i>
+                </div>
+                <h3 class="font-bold text-slate-800 text-base">未來擴充規劃</h3>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    預計擴充國一下冊「力與運動」、「二元一次聯立方程式」，並規劃學生數據學習歷程儀表板。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="w-full border-t border-slate-200 bg-white py-8 px-4 text-center text-xs text-slate-500 space-y-2">
+        <p>理數冒險王 &copy; 2026 國一理化與數學學習歷程展示平台 | STEM Interactive Presentation</p>
+        <p class="text-[11px] text-slate-400">本網站採用莫蘭迪色系（Morandi Palette）打造優雅舒適之數位展示與學習環境</p>
+    </footer>
+
+    <!-- ================= JAVASCRIPT LOGIC ================= -->
+    <script>
+        /* Web Audio API Sound Generator */
+        class SoundManager {
+            constructor() {
+                this.enabled = true;
+                this.ctx = null;
+            }
+
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            }
+
+            play(type) {
+                if (!this.enabled) return;
+                this.init();
+                const ctx = this.ctx;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                const now = ctx.currentTime;
+
+                if (type === 'click') {
+                    osc.frequency.setValueAtTime(420, now);
+                    gain.gain.setValueAtTime(0.04, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                } else if (type === 'correct') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.setValueAtTime(659.25, now + 0.08);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+                    osc.start(now);
+                    osc.stop(now + 0.22);
+                } else if (type === 'wrong') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, now);
+                    osc.frequency.setValueAtTime(160, now + 0.1);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                }
+            }
+        }
+
+        const audioManager = new SoundManager();
+
+        function toggleAudio() {
+            audioManager.enabled = !audioManager.enabled;
+            const btn = document.getElementById('audio-btn');
+            if (audioManager.enabled) {
+                btn.innerHTML = `<i class="fa-solid fa-volume-high"></i>`;
+                btn.className = "p-2 bg-slate-100 hover:bg-slate-200 text-morandi-blue rounded-lg text-xs border border-slate-200 transition";
+            } else {
+                btn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i>`;
+                btn.className = "p-2 bg-slate-100 hover:bg-slate-200 text-slate-400 rounded-lg text-xs border border-slate-200 transition";
+            }
+        }
+
+        /* QUESTION BANK */
+        const questionBank = {
+            easy: [
+                {
+                    id: "e1",
+                    type: "mc",
+                    category: "國一數學 - 正負數與數線",
+                    question: "在數線上，若 A 點代表的數為 -7，則 A 點與原點 (0) 的距離為多少？",
+                    options: ["7", "-7", "0", "14"],
+                    answerIndex: 0,
+                    hint: "「距離」恆為非負數，絕對值 |-7| 即代表與原點的距離。",
+                    explanation: "【觀念解析】\n數線上任何點到原點的距離，就是該數的「絕對值」。\n|-7| = 7，所以距離為 7。"
+                },
+                {
+                    id: "e2_tf",
+                    type: "tf",
+                    category: "國一理化 - 密度觀念辨析",
+                    question: "【觀念是非題】將一塊質地均勻的鐵塊切成兩半，切開後每一小塊鐵塊的密度也會變為原本的一半。",
+                    answerBool: false,
+                    hint: "密度是物質的特性，同一種物質在相同溫度與壓力下，密度保持不變。",
+                    explanation: "【❌ 錯誤！】\n密度 D = 質量 M ÷ 體積 V。當鐵塊切成兩半時，質量變為一半，體積也變為一半，比值（密度）依然保持不變！"
+                },
+                {
+                    id: "e3_fill",
+                    type: "fill",
+                    category: "國一數學 - 一元一次方程式填空",
+                    question: "【計算填空題】解方程式：3x - 5 = 16，請算出一數值 x 的答案並填入下方：",
+                    answerText: "7",
+                    hint: "利用等量加法與除法公理：3x = 16 + 5 = 21，再同除以 3。",
+                    explanation: "【步驟解析】\n3x - 5 = 16\n⇒ 3x = 16 + 5 = 21\n⇒ x = 21 ÷ 3 = 7。"
+                },
+                {
+                    id: "e4",
+                    type: "mc",
+                    category: "國一理化 - 密度基礎概念",
+                    question: "若有一個木塊，其質量為 60 公克，體積為 120 立方公分，請問該木塊的密度為多少 g/cm³？",
+                    options: ["0.5 g/cm³", "2.0 g/cm³", "180 g/cm³", "60 g/cm³"],
+                    answerIndex: 0,
+                    hint: "密度公式：密度 D = 質量 M ÷ 體積 V。",
+                    explanation: "【計算解析】\n密度 D = 質量 (60g) ÷ 體積 (120cm³) = 0.5 g/cm³。"
+                }
+            ],
+            medium: [
+                {
+                    id: "m1_fill",
+                    type: "fill",
+                    category: "國一數學 - 絕對值與四則運算",
+                    question: "【計算填空題】計算算式：(-12) + |(-5) × 3| - (-8) 的結果，答案為何？",
+                    answerText: "11",
+                    hint: "先計算絕對值內部：(-5) × 3 = -15，其絕對值為 15；注意減去負數等於加上正數。",
+                    explanation: "【步驟解析】\n1. |(-5) × 3| = |-15| = 15。\n2. 原式 = (-12) + 15 - (-8) = 3 + 8 = 11。"
+                },
+                {
+                    id: "m2_tf",
+                    type: "tf",
+                    category: "國一理化 - 聲音與波形辨析",
+                    question: "【觀念是非題】在相同的空氣環境中，大聲喊叫傳出的聲音速度，會比小聲說話的聲音速度還要快。",
+                    answerBool: false,
+                    hint: "聲速主要受「介質的種類與狀態（如溫度、濕度）」決定，與響度（大小聲）無關。",
+                    explanation: "【❌ 錯誤！】\n聲音在大氣中的傳播速度取決於介質（空氣溫度與濕度），大小聲（響度/振幅）只影響聲音傳得遠近，不會改變聲速！"
+                },
+                {
+                    id: "m3",
+                    type: "mc",
+                    category: "國一理化 - 溶液與重量百分濃度",
+                    question: "在 160 公克的水中加入 40 公克的食鹽，完全溶解後，該食鹽水的重量百分濃度為多少？",
+                    options: ["20%", "25%", "15%", "40%"],
+                    answerIndex: 0,
+                    hint: "重量百分濃度 P% = [溶質質量 ÷ 溶液總質量 (溶質+水)] × 100%。",
+                    explanation: "【步驟解析】\n1. 溶液總質量 = 溶質 (40g) + 水 (160g) = 200g。\n2. 濃度 P% = (40g ÷ 200g) × 100% = 20%。"
+                }
+            ],
+            hard: [
+                {
+                    id: "h1_fill",
+                    type: "fill",
+                    category: "國一理數 - 混合密度進階題",
+                    question: "【高階填空題】將 100g 密度 2 g/cm³ 的液體 A 與 150g 密度 3 g/cm³ 的液體 B 混合，混合總密度為多少 g/cm³？(請填寫小數點後一位數，如：2.5)",
+                    answerText: "2.5",
+                    hint: "總密度 = (質量 A + 質量 B) ÷ (體積 A + 體積 B)。先分別算出兩液體體積！",
+                    explanation: "【高階解析】\n1. 液體 A 體積 = 100 ÷ 2 = 50 cm³。\n2. 液體 B 體積 = 150 ÷ 3 = 50 cm³。\n3. 總質量 = 250g，總體積 = 100cm³，總密度 = 250 ÷ 100 = 2.5 g/cm³。"
+                },
+                {
+                    id: "h2_tf",
+                    type: "tf",
+                    category: "國一理化 - 飽和溶液與溫度",
+                    question: "【觀念是非題】若將一杯未飽和的硝酸鉀水溶液降溫，這杯溶液的重量百分濃度一定會立刻變小。",
+                    answerBool: false,
+                    hint: "降溫過程中，只要還沒有達到飽和並析出結晶，裡面的溶質與水的質量就沒有改變。",
+                    explanation: "【❌ 錯誤！】\n降溫過程中，只要尚未達到飽和（沒有結晶析出），溶質與溶液質量不變，濃度就不會變！只有降到飽和溫度以下並開始析出結晶後，濃度才會下降。"
+                }
+            ]
+        };
+
+        /* MEMORY PAIRS DATASET */
+        const memoryPairs = [
+            { id: 1, pairId: "A", content: "密度公式", detail: "D = M / V" },
+            { id: 2, pairId: "A", content: "D = M / V", detail: "密度公式" },
+            { id: 3, pairId: "B", content: "絕對值", detail: "數線上點到原點距離" },
+            { id: 4, pairId: "B", content: "數線上點到原點距離", detail: "絕對值" },
+            { id: 5, pairId: "C", content: "折射定律", detail: "光跨介質偏折" },
+            { id: 6, pairId: "C", content: "光跨介質偏折", detail: "折射定律" },
+            { id: 7, pairId: "D", content: "等量公理", detail: "等號兩邊同加減乘除" },
+            { id: 8, pairId: "D", content: "等號兩邊同加減乘除", detail: "等量公理" },
+            { id: 9, pairId: "E", content: "重量百分濃度", detail: "[溶質/(溶質+水)] × 100%" },
+            { id: 10, pairId: "E", content: "[溶質/(溶質+水)] × 100%", detail: "重量百分濃度" },
+            { id: 11, pairId: "F", content: "聲音三要素", detail: "響度、音調、音色" },
+            { id: 12, pairId: "F", content: "響度、音調、音色", detail: "聲音三要素" }
+        ];
+
+        /* APP STATE */
+        let state = {
+            difficulty: 'easy',
+            totalScore: 0,
+            activeScreen: 'mode-select-screen',
+            currentMode: null,
+            quizIndex: 0,
+            quizScore: 0,
+            quizQuestions: [],
+            memoryCards: [],
+            flippedCards: [],
+            matchedPairs: 0,
+            memoryMoves: 0,
+            taScore: 0,
+            taTimeLeft: 60,
+            taTimerInterval: null,
+            taQuestions: [],
+            taIndex: 0,
+            mistakes: []
+        };
+
+        function setDifficulty(diff) {
+            state.difficulty = diff;
+            audioManager.play('click');
+
+            const diffBtns = {
+                easy: document.getElementById('diff-btn-easy'),
+                medium: document.getElementById('diff-btn-medium'),
+                hard: document.getElementById('diff-btn-hard')
+            };
+
+            const tagText = { easy: "🟢 簡單", medium: "🟡 中等", hard: "🔴 難" };
+            document.getElementById('quiz-diff-tag').innerText = tagText[diff];
+            document.getElementById('quiz-diff-badge').innerText = tagText[diff];
+
+            Object.keys(diffBtns).forEach(k => {
+                const btn = diffBtns[k];
+                if (k === diff) {
+                    btn.className = "py-2 px-3 rounded-xl font-semibold text-xs border border-morandi-sage bg-morandi-sageLight text-morandi-sage shadow-sm transition";
+                } else {
+                    btn.className = "py-2 px-3 rounded-xl font-semibold text-xs border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 transition";
+                }
+            });
+        }
+
+        function showScreen(screenId) {
+            const screens = ['mode-select-screen', 'concept-lab-screen', 'quiz-screen', 'memory-screen', 'timeattack-screen'];
+            screens.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+
+            const target = document.getElementById(screenId);
+            if (target) {
+                target.classList.remove('hidden');
+                state.activeScreen = screenId;
+            }
+
+            if (screenId !== 'timeattack-screen' && state.taTimerInterval) {
+                clearInterval(state.taTimerInterval);
+            }
+
+            if (screenId === 'concept-lab-screen') {
+                updateDensitySim();
+                updateEqSim();
+            }
+        }
+
+        function updateDensitySim() {
+            const m = parseFloat(document.getElementById('sim-m').value);
+            const v = parseFloat(document.getElementById('sim-v').value);
+
+            document.getElementById('sim-m-val').innerText = m;
+            document.getElementById('sim-v-val').innerText = v;
+
+            const density = (m / v).toFixed(2);
+            document.getElementById('sim-density-res').innerText = `${density} g/cm³`;
+
+            const obj = document.getElementById('sim-object');
+            const status = document.getElementById('sim-float-status');
+
+            if (density < 1.0) {
+                obj.style.transform = "translateY(-50px)";
+                status.innerText = "浮於水面 (密度 < 1.0 g/cm³)";
+                status.className = "text-xs font-semibold text-morandi-sage";
+            } else if (density == 1.0) {
+                obj.style.transform = "translateY(-20px)";
+                status.innerText = "懸浮於水中 (密度 = 1.0 g/cm³)";
+                status.className = "text-xs font-semibold text-morandi-amber";
+            } else {
+                obj.style.transform = "translateY(15px)";
+                status.innerText = "沉入水底 (密度 > 1.0 g/cm³)";
+                status.className = "text-xs font-semibold text-morandi-rose";
+            }
+        }
+
+        function updateEqSim() {
+            const a = parseInt(document.getElementById('sim-eq-a').value);
+            const b = parseInt(document.getElementById('sim-eq-b').value);
+
+            document.getElementById('sim-eq-a-val').innerText = a;
+            document.getElementById('sim-eq-b-val').innerText = b;
+
+            document.getElementById('eq-left-a').innerText = a;
+            document.getElementById('eq-right-b').innerText = b;
+
+            const x = b - a;
+            document.getElementById('sim-eq-res').innerText = `x = ${b} - ${a} = ${x}`;
+        }
+
+        function startQuizMode() {
+            state.currentMode = 'quiz';
+            state.quizIndex = 0;
+            state.quizScore = 0;
+            
+            const currentBank = questionBank[state.difficulty] || questionBank.easy;
+            state.quizQuestions = [...currentBank].sort(() => 0.5 - Math.random());
+
+            showScreen('quiz-screen');
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const q = state.quizQuestions[state.quizIndex];
+            document.getElementById('quiz-category-tag').innerText = q.category;
+            document.getElementById('current-question-num').innerText = state.quizIndex + 1;
+            document.getElementById('total-questions-num').innerText = state.quizQuestions.length;
+            
+            const pct = ((state.quizIndex + 1) / state.quizQuestions.length) * 100;
+            document.getElementById('quiz-progress-bar').style.width = `${pct}%`;
+
+            document.getElementById('quiz-question-text').innerText = q.question;
+
+            if (q.hint) {
+                document.getElementById('quiz-hint-box').classList.remove('hidden');
+                document.getElementById('quiz-hint-text').innerText = q.hint;
+            } else {
+                document.getElementById('quiz-hint-box').classList.add('hidden');
+            }
+
+            const container = document.getElementById('quiz-options-container');
+            container.innerHTML = '';
+
+            if (q.type === 'tf') {
+                container.innerHTML = `
+                    <button onclick="checkQuizAnswer(true)" class="w-full p-3.5 rounded-xl bg-morandi-sageLight hover:bg-morandi-sage/20 border border-morandi-sage/40 text-morandi-sage font-bold text-sm flex items-center justify-center space-x-2 transition shadow-sm">
+                        <i class="fa-solid fa-circle-check text-lg"></i>
+                        <span>⭕ 正確 (True)</span>
+                    </button>
+                    <button onclick="checkQuizAnswer(false)" class="w-full p-3.5 rounded-xl bg-morandi-roseLight hover:bg-morandi-rose/20 border border-morandi-rose/40 text-morandi-rose font-bold text-sm flex items-center justify-center space-x-2 transition shadow-sm">
+                        <i class="fa-solid fa-circle-xmark text-lg"></i>
+                        <span>❌ 錯誤 (False)</span>
+                    </button>
+                `;
+            } else if (q.type === 'fill') {
+                container.innerHTML = `
+                    <div class="col-span-full space-y-3">
+                        <div class="flex items-center space-x-2">
+                            <input type="text" id="quiz-fill-input" placeholder="請在此輸入答案數值 (例如: 7 或 2.5)..." class="flex-grow p-3 rounded-xl bg-slate-50 border border-slate-300 text-slate-800 font-bold text-xs focus:outline-none focus:border-morandi-blue">
+                            <button onclick="checkQuizAnswer(document.getElementById('quiz-fill-input').value.trim())" class="px-4 py-3 bg-morandi-blue hover:bg-morandi-blue/90 font-semibold text-white text-xs rounded-xl shadow-sm whitespace-nowrap">
+                                送出答案 <i class="fa-solid fa-paper-plane ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                q.options.forEach((optText, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = "w-full text-left p-3.5 rounded-xl bg-white hover:bg-morandi-blueLight/50 border border-slate-200 transition flex items-center justify-between text-slate-700 text-xs font-medium shadow-sm";
+                    btn.innerHTML = `
+                        <div class="flex items-center space-x-3">
+                            <span class="w-6 h-6 rounded-lg bg-morandi-slate flex items-center justify-center font-bold text-morandi-blue text-xs border border-slate-200">${String.fromCharCode(65 + idx)}</span>
+                            <span>${optText}</span>
+                        </div>
+                    `;
+                    btn.onclick = () => checkQuizAnswer(idx);
+                    container.appendChild(btn);
+                });
+            }
+
+            document.getElementById('quiz-explanation-box').classList.add('hidden');
+        }
+
+        function checkQuizAnswer(userAns) {
+            const q = state.quizQuestions[state.quizIndex];
+            const container = document.getElementById('quiz-options-container');
+            let isCorrect = false;
+
+            if (q.type === 'tf') {
+                isCorrect = (userAns === q.answerBool);
+            } else if (q.type === 'fill') {
+                isCorrect = (String(userAns).toLowerCase() === String(q.answerText).toLowerCase());
+            } else {
+                isCorrect = (userAns === q.answerIndex);
+            }
+
+            const inputs = container.querySelectorAll('button, input');
+            inputs.forEach(el => el.disabled = true);
+
+            if (isCorrect) {
+                audioManager.play('correct');
+                const pts = state.difficulty === 'hard' ? 150 : (state.difficulty === 'medium' ? 120 : 100);
+                addPoints(pts);
+                triggerConfetti();
+                state.quizScore += pts;
+            } else {
+                audioManager.play('wrong');
+                addMistake(q);
+            }
+
+            document.getElementById('quiz-explanation-text').innerText = (isCorrect ? "✅ 回答正確！\n" : "❌ 回答錯誤！\n") + q.explanation;
+            document.getElementById('quiz-explanation-box').classList.remove('hidden');
+        }
+
+        function nextQuizQuestion() {
+            state.quizIndex++;
+            if (state.quizIndex < state.quizQuestions.length) {
+                renderQuizQuestion();
+            } else {
+                showResultModal("國一理數關卡完成！", "你已經完成本階段難度的全部挑戰！", state.quizScore);
+            }
+        }
+
+        function startMemoryGame() {
+            state.currentMode = 'memory';
+            state.memoryMoves = 0;
+            state.matchedPairs = 0;
+            state.flippedCards = [];
+
+            document.getElementById('memory-moves').innerText = '0';
+            document.getElementById('memory-matches').innerText = `0 / 6`;
+
+            state.memoryCards = [...memoryPairs].sort(() => 0.5 - Math.random());
+            
+            showScreen('memory-screen');
+            renderMemoryGrid();
+        }
+
+        function renderMemoryGrid() {
+            const grid = document.getElementById('memory-grid');
+            grid.innerHTML = '';
+
+            state.memoryCards.forEach((card, idx) => {
+                const cardEl = document.createElement('div');
+                cardEl.className = "card-flip h-24 cursor-pointer";
+                cardEl.innerHTML = `
+                    <div id="card-inner-${idx}" class="card-inner">
+                        <div class="card-front bg-white border border-slate-200 rounded-xl hover:border-morandi-mauve transition shadow-sm flex flex-col items-center justify-center space-y-1">
+                            <i class="fa-solid fa-atom text-morandi-mauve text-lg"></i>
+                            <span class="text-[10px] text-slate-400">理數記憶</span>
+                        </div>
+                        <div class="card-back bg-morandi-mauveLight border border-morandi-mauve text-slate-800 font-bold p-2 text-center text-xs flex items-center justify-center shadow-md">
+                            ${card.detail}
+                        </div>
+                    </div>
+                `;
+                cardEl.onclick = () => flipCard(idx);
+                grid.appendChild(cardEl);
+            });
+        }
+
+        function flipCard(index) {
+            if (state.flippedCards.length >= 2) return;
+            const inner = document.getElementById(`card-inner-${index}`);
+            if (inner.classList.contains('is-flipped')) return;
+
+            audioManager.play('click');
+            inner.classList.add('is-flipped');
+            state.flippedCards.push(index);
+
+            if (state.flippedCards.length === 2) {
+                state.memoryMoves++;
+                document.getElementById('memory-moves').innerText = state.memoryMoves;
+
+                const [idx1, idx2] = state.flippedCards;
+                const card1 = state.memoryCards[idx1];
+                const card2 = state.memoryCards[idx2];
+
+                if (card1.pairId === card2.pairId) {
+                    audioManager.play('correct');
+                    state.matchedPairs++;
+                    document.getElementById('memory-matches').innerText = `${state.matchedPairs} / 6`;
+                    addPoints(100);
+                    triggerConfetti();
+                    state.flippedCards = [];
+
+                    if (state.matchedPairs === 6) {
+                        setTimeout(() => {
+                            showResultModal("翻牌對對碰完成！", `恭喜完成觀念配對！總共使用步數：${state.memoryMoves}`, 600);
+                        }, 500);
+                    }
+                } else {
+                    audioManager.play('wrong');
+                    setTimeout(() => {
+                        document.getElementById(`card-inner-${idx1}`).classList.remove('is-flipped');
+                        document.getElementById(`card-inner-${idx2}`).classList.remove('is-flipped');
+                        state.flippedCards = [];
+                    }, 800);
+                }
+            }
+        }
+
+        function startTimeAttackMode() {
+            state.currentMode = 'timeattack';
+            state.taScore = 0;
+            state.taTimeLeft = 60;
+            state.taIndex = 0;
+
+            const allQs = [...questionBank.easy, ...questionBank.medium, ...questionBank.hard];
+            state.taQuestions = allQs.sort(() => 0.5 - Math.random());
+
+            document.getElementById('ta-score').innerText = '0';
+            document.getElementById('ta-timer').innerText = '60';
+
+            showScreen('timeattack-screen');
+            renderTAQuestion();
+
+            if (state.taTimerInterval) clearInterval(state.taTimerInterval);
+            state.taTimerInterval = setInterval(() => {
+                state.taTimeLeft--;
+                document.getElementById('ta-timer').innerText = state.taTimeLeft;
+
+                if (state.taTimeLeft <= 0) {
+                    clearInterval(state.taTimerInterval);
+                    showResultModal("時間到！", `60秒衝刺結束！你一共答對了 ${state.taScore} 題國一理數題目！`, state.taScore * 80);
+                }
+            }, 1000);
+        }
+
+        function renderTAQuestion() {
+            const q = state.taQuestions[state.taIndex];
+            document.getElementById('ta-question-text').innerText = q.question;
+
+            const container = document.getElementById('ta-options-container');
+            container.innerHTML = '';
+
+            q.options.forEach((optText, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-3.5 rounded-xl bg-white hover:bg-morandi-amberLight border border-slate-200 transition text-slate-700 text-xs font-medium shadow-sm";
+                btn.innerText = `${String.fromCharCode(65 + idx)}. ${optText}`;
+                btn.onclick = () => checkTAAnswer(idx);
+                container.appendChild(btn);
+            });
+        }
+
+        function checkTAAnswer(idx) {
+            const q = state.taQuestions[state.taIndex];
+            if (idx === q.answerIndex) {
+                audioManager.play('correct');
+                state.taScore++;
+                document.getElementById('ta-score').innerText = state.taScore;
+                addPoints(40);
+            } else {
+                audioManager.play('wrong');
+                addMistake(q);
+            }
+
+            state.taIndex++;
+            if (state.taIndex < state.taQuestions.length) {
+                renderTAQuestion();
+            } else {
+                state.taIndex = 0;
+                renderTAQuestion();
+            }
+        }
+
+        function addMistake(question) {
+            if (!state.mistakes.find(m => m.id === question.id)) {
+                state.mistakes.push(question);
+                updateMistakeBadge();
+            }
+        }
+
+        function updateMistakeBadge() {
+            const badge = document.getElementById('mistake-badge');
+            if (state.mistakes.length > 0) {
+                badge.innerText = state.mistakes.length;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function openMistakeNotebook() {
+            const list = document.getElementById('mistake-list');
+            list.innerHTML = '';
+
+            if (state.mistakes.length === 0) {
+                list.innerHTML = `<p class="text-center text-slate-400 text-xs py-8">🎉 太棒了！目前沒有任何錯題紀錄！</p>`;
+            } else {
+                state.mistakes.forEach((q) => {
+                    const item = document.createElement('div');
+                    item.className = "bg-morandi-slate p-3.5 rounded-xl border border-slate-200 space-y-2 text-xs";
+                    item.innerHTML = `
+                        <div class="flex justify-between font-semibold text-morandi-rose">
+                            <span>${q.category}</span>
+                            <button onclick="removeMistake('${q.id}')" class="text-slate-400 hover:text-slate-600">刪除</button>
+                        </div>
+                        <p class="text-slate-800 font-medium">${q.question}</p>
+                        <div class="bg-white p-2.5 rounded text-slate-600 border border-slate-200 leading-relaxed whitespace-pre-line">
+                            ${q.explanation}
+                        </div>
+                    `;
+                    list.appendChild(item);
+                });
+            }
+
+            document.getElementById('mistake-modal').classList.remove('hidden');
+        }
+
+        function removeMistake(id) {
+            state.mistakes = state.mistakes.filter(m => m.id !== id);
+            updateMistakeBadge();
+            openMistakeNotebook();
+        }
+
+        function closeMistakeNotebook() {
+            document.getElementById('mistake-modal').classList.add('hidden');
+        }
+
+        function addPoints(pts) {
+            state.totalScore += pts;
+            document.getElementById('user-score').innerText = state.totalScore;
+        }
+
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 30, spread: 50, origin: { y: 0.7 } });
+            }
+        }
+
+        function showResultModal(title, subtitle, scoreEarned) {
+            document.getElementById('result-title').innerText = title;
+            document.getElementById('result-subtitle').innerText = subtitle;
+            document.getElementById('result-score').innerText = `+${scoreEarned}`;
+
+            let rank = "S";
+            if (scoreEarned < 200) rank = "C";
+            else if (scoreEarned < 400) rank = "B";
+            else if (scoreEarned < 600) rank = "A";
+            document.getElementById('result-rank').innerText = rank;
+
+            document.getElementById('result-modal').classList.remove('hidden');
+        }
+
+        function closeResultModal() {
+            document.getElementById('result-modal').classList.add('hidden');
+        }
+
+        function restartCurrentMode() {
+            closeResultModal();
+            if (state.currentMode === 'quiz') startQuizMode();
+            else if (state.currentMode === 'memory') startMemoryGame();
+            else if (state.currentMode === 'timeattack') startTimeAttackMode();
+            else showScreen('mode-select-screen');
+        }
+
+        window.onload = function() {
+            setDifficulty('easy');
+            showScreen('mode-select-screen');
+        }
+    </script>
+</body>
+</html>
